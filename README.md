@@ -1,69 +1,61 @@
-# Welcome to your Lovable project
+# Question-Craft-AI
 
-## Project info
+An AI-powered interview question generation tool.
 
-**URL**: https://lovable.dev/projects/a513109b-3957-4c1c-88e5-4185eca780db
+## Project Info
 
-## How can I edit this code?
+**URL**: [Lovable Project](https://lovable.dev/projects/a513109b-3957-4c1c-88e5-4185eca780db)
 
-There are several ways of editing your application.
+## How to Edit This Code
 
-**Use Lovable**
+You can edit your application in several ways:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/a513109b-3957-4c1c-88e5-4185eca780db) and start prompting.
+### Use Lovable
 
-Changes made via Lovable will be committed automatically to this repo.
+Simply visit the [Lovable Project](https://lovable.dev/projects/a513109b-3957-4c1c-88e5-4185eca780db) and start prompting. Changes made via Lovable will be committed automatically to this repository.
 
-**Use your preferred IDE**
+### Use Your Preferred IDE
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+To work locally using your own IDE:
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+1. **Clone the repository**:
+    ```sh
+    git clone https://github.com/ayushpratapsingh1/Question-Craft-AI
+    ```
+2. **Navigate to the project directory**:
+    ```sh
+    cd Question-Craft-AI
+    ```
+3. **Install the necessary dependencies**:
+    ```sh
+    npm install
+    ```
+4. **Start the development server**:
+    ```sh
+    npm run dev
+    ```
 
-Follow these steps:
+### Edit a File Directly in GitHub
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+1. Navigate to the desired file(s).
+2. Click the "Edit" button (pencil icon) at the top.
+3. Make your changes and commit them.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Use GitHub Codespaces
 
-# Step 3: Install the necessary dependencies.
-npm i
+1. Navigate to the main page of your repository.
+2. Click on the "Code" button (green button) near the top.
+3. Select the "Codespaces" tab.
+4. Click on "New codespace" to launch a new Codespace.
+5. Edit files directly within the Codespace and commit your changes.
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+## Technologies Used
 
-**Edit a file directly in GitHub**
+This project uses:
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+- TypeScript (98.3%)
+- Other (1.7%)
 
-**Use GitHub Codespaces**
+## License
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/a513109b-3957-4c1c-88e5-4185eca780db) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+This project is licensed under the MIT License.
