@@ -1,24 +1,34 @@
 import { useState } from "react";
 import { InterviewForm, InterviewFormData } from "@/components/InterviewForm";
 import { QuestionCard, Question } from "@/components/QuestionCard";
-
-const generateMockQuestions = (data: InterviewFormData): Question[] => {
-  // This is a mock implementation - replace with actual API call
-  return Array.from({ length: data.numberOfQuestions }, (_, i) => ({
-    category: ["Easy", "Medium", "Hard"][i % 3] as Question["category"],
-    question: `Sample ${data.questionType} question ${i + 1} for a ${
-      data.experienceLevel
-    } ${data.jobRole} in ${data.industry}?`,
-    answer: "This is a sample answer that would be replaced with actual content from an API call.",
-  }));
-};
+import { useToast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function Index() {
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
-  const handleFormSubmit = (data: InterviewFormData) => {
-    const generatedQuestions = generateMockQuestions(data);
-    setQuestions(generatedQuestions);
+  const handleFormSubmit = async (data: InterviewFormData) => {
+    setIsLoading(true);
+    try {
+      const { data: response, error } = await supabase.functions.invoke('generate-questions', {
+        body: data,
+      });
+
+      if (error) throw error;
+
+      setQuestions(response.questions);
+    } catch (error) {
+      console.error('Error generating questions:', error);
+      toast({
+        title: "Error",
+        description: "Failed to generate questions. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -34,7 +44,7 @@ export default function Index() {
         </div>
 
         <div className="mb-8">
-          <InterviewForm onSubmit={handleFormSubmit} />
+          <InterviewForm onSubmit={handleFormSubmit} isLoading={isLoading} />
         </div>
 
         {questions.length > 0 && (

@@ -20,9 +20,10 @@ export type InterviewFormData = {
 
 interface InterviewFormProps {
   onSubmit: (data: InterviewFormData) => void;
+  isLoading?: boolean;
 }
 
-export function InterviewForm({ onSubmit }: InterviewFormProps) {
+export function InterviewForm({ onSubmit, isLoading = false }: InterviewFormProps) {
   const [formData, setFormData] = useState<InterviewFormData>({
     jobRole: "",
     experienceLevel: "intermediate",
@@ -48,6 +49,7 @@ export function InterviewForm({ onSubmit }: InterviewFormProps) {
             setFormData({ ...formData, jobRole: e.target.value })
           }
           required
+          disabled={isLoading}
         />
       </div>
 
@@ -58,6 +60,7 @@ export function InterviewForm({ onSubmit }: InterviewFormProps) {
           onValueChange={(value) =>
             setFormData({ ...formData, experienceLevel: value })
           }
+          disabled={isLoading}
         >
           <SelectTrigger>
             <SelectValue placeholder="Select experience level" />
@@ -80,6 +83,7 @@ export function InterviewForm({ onSubmit }: InterviewFormProps) {
             setFormData({ ...formData, industry: e.target.value })
           }
           required
+          disabled={isLoading}
         />
       </div>
 
@@ -90,6 +94,7 @@ export function InterviewForm({ onSubmit }: InterviewFormProps) {
           onValueChange={(value) =>
             setFormData({ ...formData, questionType: value })
           }
+          disabled={isLoading}
         >
           <SelectTrigger>
             <SelectValue placeholder="Select question type" />
@@ -117,11 +122,12 @@ export function InterviewForm({ onSubmit }: InterviewFormProps) {
             })
           }
           required
+          disabled={isLoading}
         />
       </div>
 
-      <Button type="submit" className="w-full">
-        Generate Questions
+      <Button type="submit" className="w-full" disabled={isLoading}>
+        {isLoading ? "Generating Questions..." : "Generate Questions"}
       </Button>
     </form>
   );
