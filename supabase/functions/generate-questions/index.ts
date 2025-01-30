@@ -14,11 +14,21 @@ serve(async (req) => {
   try {
     const { jobRole, experienceLevel, industry, questionType, numberOfQuestions } = await req.json();
 
-    const systemPrompt = `You are an expert interviewer. Generate ${numberOfQuestions} unique ${questionType} interview questions for a ${experienceLevel} ${jobRole} position in the ${industry} industry. For each question, provide:
-    1. A difficulty level (Easy/Medium/Hard)
-    2. The question itself
-    3. A detailed model answer
-    Format each question as a JSON object with "category", "question", and "answer" fields.`;
+    const systemPrompt = `You are an expert interviewer. Generate ${numberOfQuestions} unique ${questionType} interview questions for a ${experienceLevel} ${jobRole} position in the ${industry} industry. 
+
+Important: Your response must be a valid JSON array where each question object has these exact fields:
+- category: string (Easy/Medium/Hard)
+- question: string
+- answer: string
+
+Example format:
+[
+  {
+    "category": "Medium",
+    "question": "What is...",
+    "answer": "A good answer would be..."
+  }
+]`;
 
     console.log('Making request to Nebius AI Studio with prompt:', systemPrompt);
 
@@ -35,7 +45,7 @@ serve(async (req) => {
         top_p: 0.9,
         messages: [
           { role: "system", content: systemPrompt },
-          { role: "user", content: "Generate the interview questions now." }
+          { role: "user", content: "Generate the interview questions now in the specified JSON format." }
         ],
         extra_body: {
           top_k: 50
@@ -50,38 +60,42 @@ serve(async (req) => {
     }
 
     const data = await response.json();
-    console.log('Nebius API Response:', data);
+    console.log('Raw Nebius API Response:', JSON.stringify(data, null, 2));
 
     let questions;
     try {
       const content = data.choices[0].message.content;
-      // Try to parse the content directly first
-      try {
-        questions = JSON.parse(content);
-      } catch {
-        // If direct parsing fails, try to extract JSON array
-        const jsonMatch = content.match(/\[[\s\S]*\]/);
-        if (jsonMatch) {
-          questions = JSON.parse(jsonMatch[0]);
-        } else {
-          throw new Error('Could not extract JSON from response');
-        }
+      console.log('AI Response Content:', content);
+
+      // Try to extract JSON from the content
+      const jsonMatch = content.match(/\[\s*\{[\s\S]*\}\s*\]/);
+      if (!jsonMatch) {
+        throw new Error('No JSON array found in response');
       }
+
+      questions = JSON.parse(jsonMatch[0]);
 
       // Validate the questions format
       if (!Array.isArray(questions)) {
         throw new Error('Response is not an array');
       }
 
-      questions = questions.map(q => ({
-        category: q.category || 'Medium',
-        question: q.question,
-        answer: q.answer
-      }));
+      // Validate and normalize each question
+      questions = questions.map((q, index) => {
+        if (!q.question || !q.answer) {
+          throw new Error(`Question ${index + 1} is missing required fields`);
+        }
+        return {
+          category: q.category || 'Medium',
+          question: q.question,
+          answer: q.answer
+        };
+      });
 
     } catch (error) {
       console.error('Error parsing AI response:', error);
-      throw new Error('Failed to parse AI response into proper format');
+      console.error('Raw content:', data.choices[0].message.content);
+      throw new Error(`Failed to parse AI response: ${error.message}`);
     }
 
     return new Response(JSON.stringify({ questions }), {
